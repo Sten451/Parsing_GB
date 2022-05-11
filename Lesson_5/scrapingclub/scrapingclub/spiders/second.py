@@ -1,6 +1,7 @@
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+from scrapy.http import HtmlResponse
 
 
 class SecondSpider(CrawlSpider):
@@ -15,7 +16,7 @@ class SecondSpider(CrawlSpider):
             restrict_xpaths='//div[@class="card"]/div[@class="card-body"]/h4/a'), follow=True, callback='parse_item')
     )
 
-    def parse_item(self, response):
+    def parse_item(self, response: HtmlResponse):
         item = {}
         item['title'] = response.xpath(
             '//h3[@class="card-title"]/text()').get()
