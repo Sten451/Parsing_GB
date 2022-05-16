@@ -1,3 +1,4 @@
+import csv
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
@@ -6,7 +7,19 @@ from scrapy.spiders import CrawlSpider, Rule
 class SpecialSpider(CrawlSpider):
     name = 'special'
     allowed_domains = ['directory.independent.co.uk']
-    start_urls = ['https://directory.independent.co.uk/dog-grooming/in/uk']
+    start_urls = []
+
+    with open("Towns_List.csv", 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == 'Town':
+                continue
+            temp_url = row[0].replace(' ', '-')
+            start_urls.append(
+                'https://directory.independent.co.uk/dog-grooming/in/' + temp_url.lower())
+        print(start_urls)
+
+    #start_urls = ['https://directory.independent.co.uk/dog-grooming/in/uk']
 
     rules = (
         Rule(LinkExtractor(
@@ -23,7 +36,8 @@ class SpecialSpider(CrawlSpider):
             '//p[@class="profile-category"]/text()').get()
         item['address'] = response.xpath(
             '//p[@class="profile-address"]/text()').getall()
-        item['phone'] = response.xpath(
-            '//div[@class="profile-numbers"]/p[contains(@class, "profile-number")]/a[last()]/@link_number').get()
+        item['phone'] = (response.xpath(
+            "//p[@class='profile-number ']/a/@link_number").get())
         item['url'] = response.url
+        item['town'] = response.request.headers.get('Referer')
         return item
