@@ -73,11 +73,11 @@ class HhFindPipeline:
             post = Session.query(Post).filter(Post.href == item['url']).first()
             if not post:
                 item_for_insert = Post(item['url'], item['title'], item['author'], item['salary'],
-                                       item['experience'], item['type_of_work'], item['content'], 'Новое')
+                                       item['experience'], item['type_of_work'], item['content'], 'NEW')
                 Session.add(item_for_insert)
                 Session.commit()
                 print(f"Новая вакансия: {item['title']} от {item['author']}")
-                
+
             else:
                 print(f"ПОВТОР: {item['title']} от {item['author']}")
             Session.close()
