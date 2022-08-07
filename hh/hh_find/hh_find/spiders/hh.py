@@ -62,7 +62,7 @@ class SpecialSpider(CrawlSpider):
             "//span[@class='vacancy-company-name']/a/span[@class='bloko-header-section-2 bloko-header-section-2_lite']/span/text()").getall())
         if author2:
             item['author'] = item['author'] + ' ' + author2
-        item['experience'] = 'Требуемый опыт работы: ' + (response.xpath(
+        item['experience'] = (response.xpath(
             "//span[@data-qa='vacancy-experience']/text()").get())
         item['type_of_work'] = 'Вид работы: ' + (response.xpath(
             "//p[@data-qa='vacancy-view-employment-mode']/span/text()").get())

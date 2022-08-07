@@ -30,8 +30,9 @@ class Post(Base):
     type_of_work = Column(String())
     content = Column(String())
     status = Column(String())
+    note = Column(String())
 
-    def __init__(self, href, title, author, salary, experience, type_of_work, content, status):
+    def __init__(self, href, title, author, salary, experience, type_of_work, content, status, note):
         self.title = title
         self.salary = salary
         self.experience = experience
@@ -40,6 +41,7 @@ class Post(Base):
         self.href = href
         self.type_of_work = type_of_work
         self.status = status
+        self.note = note
 
 
 class HhFindPipeline:
@@ -73,7 +75,7 @@ class HhFindPipeline:
             post = Session.query(Post).filter(Post.href == item['url']).first()
             if not post:
                 item_for_insert = Post(item['url'], item['title'], item['author'], item['salary'],
-                                       item['experience'], item['type_of_work'], item['content'], 'NEW')
+                                       item['experience'], item['type_of_work'], item['content'], None, 'NEW')
                 Session.add(item_for_insert)
                 Session.commit()
                 print(f"Новая вакансия: {item['title']} от {item['author']}")
